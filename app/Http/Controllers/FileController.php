@@ -42,25 +42,25 @@ class FileController extends Controller
         return redirect()->route('gambar.index')->with('succes', 'File berhasil diunggah');
     }
 
-    public function destroy($id){
-
+    public function destroy($id)
+    {
         $file = FileModel::findOrFail($id);
 
-        Log::debug('Cek File yang pengen di hapus:', ['file' => $file]);
+        Log::debug('Deleting file:', ['file' => $file]);
 
         unlink(public_path('storage/' . $file->file_path));
 
-        $file->delete;
-        $files=FIleModel::all();
+        $file->delete();
 
-        foreach ($files as $index => $file){
+        $files = FileModel::all();
+        
+        foreach ($files as $index => $file) {
             $file->id = $index + 1;
         }
-
-        Log::debug('Cek data file:', ['files' => $files]);
-
-        return redirect()->route('gambar.index')->with('succes', 'File berhasil dihapus');
-
+        
+        Log::debug('Remaining files:', ['files' => $files]);
+        
+        return redirect()->route('gambar.index')->with('success', 'File berhasil dihapus');
     }
 
     public function edit($id){
